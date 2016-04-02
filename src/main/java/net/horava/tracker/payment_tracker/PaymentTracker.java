@@ -1,5 +1,9 @@
 package net.horava.tracker.payment_tracker;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -25,20 +29,23 @@ public class PaymentTracker {
 	private Thread printer;
 
 	public static void main(String[] args) {
-		for (String arg : args) {
-			System.out.println(arg);
+		String path = "";
+
+		if (args.length > 0) {
+			path = args[0];
 		}
 
-		new PaymentTracker();
+		new PaymentTracker(path);
 	}
 
 	/**
 	 * Constructor that initialize account, printer and then wait for user
 	 * input.
 	 */
-	public PaymentTracker() {
+	public PaymentTracker(String path) {
 		account = new Account();
-		example(account);
+		if (!path.isEmpty())
+			readFileInput(path);
 		initPrinter();
 		readInput();
 	}
@@ -46,15 +53,16 @@ public class PaymentTracker {
 	/**
 	 * Initialize thread for printing account balances.
 	 */
-	public void initPrinter() {
+	private void initPrinter() {
 		printer = new Thread(account);
 		printer.start();
 	}
 
 	/**
-	 * It wait for user input from console. User can create payment or quit application.
+	 * It wait for user input from console. User can create payment or quit
+	 * application.
 	 */
-	public void readInput() {
+	private void readInput() {
 		Scanner scan = new Scanner(System.in);
 		String input = "";
 		Pattern pattern = Pattern
@@ -77,23 +85,33 @@ public class PaymentTracker {
 			}
 		}
 		printer.interrupt();
-		System.out.println("End.");
+		System.out.print("End.");
 		scan.close();
 	}
 
 	/**
-	 * TODO: odstranit
+	 * Read file of transactions and store it into the account.
 	 * 
-	 * Example values. 
-	 * 
-	 * @param account
+	 * @param path Path to file with transactions.
 	 */
-	public void example(Account account) {
-		account.createPayment("USD", 1000);
-		account.createPayment("HKD", 100);
-		account.createPayment("USD", -100);
-		account.createPayment("RMB", 2000);
-		account.createPayment("HKD", 200);
+	private void readFileInput(String path) {
+		List<String> lines;
+		try {
+			lines = Files.readAllLines(Paths.get(path));
+		} catch (IOException e) {
+			System.out.println("Could not read file: " + path);
+			return;
+		}
+
+		for (String line : lines) {
+			try {
+				account.createPaymentFromString(line);
+			} catch (Exception e) {
+				System.out.println("Invalid command: \"" + line + "\"");
+			}
+		}
+
+		System.out.println("File " + path + " is loaded.");
 	}
 
 }
