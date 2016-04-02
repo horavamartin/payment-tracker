@@ -15,9 +15,10 @@ import java.util.regex.Pattern;
 public class Account implements Runnable {
 
 	/**
-	 * Default wait time between printing accaunt balances.
+	 * Default wait time between printing account balances. Time is specified in
+	 * miliseconds.
 	 */
-	private static long SLEEP_TIME = 10000;
+	private static long SLEEP_TIME = 60000;
 
 	/**
 	 * Account balances for every currency
