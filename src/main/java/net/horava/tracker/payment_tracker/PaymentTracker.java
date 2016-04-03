@@ -21,7 +21,7 @@ public class PaymentTracker {
 	/**
 	 * Account with all stored currencies and their values.
 	 */
-	public Account account;
+	private Account account;
 
 	/**
 	 * Thread for printing account balances.

@@ -83,7 +83,7 @@ public class Currency {
 	 * currency. Exchange rate is downloaded from yahoo.com web pages.
 	 */
 	private void downloadRate() {
-		if (id != DEFAULT_CURRENCY) {
+		if (!id.equalsIgnoreCase(DEFAULT_CURRENCY)) {
 			URL url;
 			try {
 				url = new URL("http://quote.yahoo.com/d/quotes.csv?f=l1&s="
@@ -110,10 +110,10 @@ public class Currency {
 	 */
 	public void print() {
 		if (value != 0) {
-			if (id != DEFAULT_CURRENCY && rate != 0) {
+			if (!id.equalsIgnoreCase(DEFAULT_CURRENCY) && rate != 0) {
 				System.out.printf("%s %d (%s %.2f)\n", id, value,
 						DEFAULT_CURRENCY, value / rate);
-			} else if (id != DEFAULT_CURRENCY) {
+			} else if (!id.equalsIgnoreCase(DEFAULT_CURRENCY)) {
 				System.out.printf("%s %d (%s N/A)\n", id, value,
 						DEFAULT_CURRENCY);
 			} else {
@@ -121,5 +121,4 @@ public class Currency {
 			}
 		}
 	}
-
 }

@@ -23,7 +23,7 @@ public class Account implements Runnable {
 	/**
 	 * Account balances for every currency
 	 */
-	protected HashMap<String, Currency> balances = new HashMap<String, Currency>();
+	private HashMap<String, Currency> balances = new HashMap<String, Currency>();
 
 	/**
 	 * It stores value in given currency.
